@@ -1,4 +1,4 @@
-defmodule Watch do
+defmodule Registry do
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -8,14 +8,14 @@ defmodule Watch do
 
     children = [
       # Define workers and child supervisors to be supervised
-      # worker(Watch.Worker, [arg1, arg2, arg3]),
-      worker(Watch.Registry, []),
-      worker(Watch.Log, [])
+      # worker(Registry.Worker, [arg1, arg2, arg3]),
+      worker(Registry.Poller, []),
+      worker(Registry.Log, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Watch.Supervisor]
+    opts = [strategy: :one_for_one, name: Registry.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

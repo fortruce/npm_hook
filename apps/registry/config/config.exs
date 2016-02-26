@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :watch, key: :value
+#     config :registry, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:watch, :key)
+#     Application.get_env(:registry, :key)
 #
 # Or configure a 3rd-party app:
 #

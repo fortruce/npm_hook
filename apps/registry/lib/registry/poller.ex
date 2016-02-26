@@ -1,4 +1,4 @@
-defmodule Watch.Registry do
+defmodule Registry.Poller do
   use GenServer
   require Logger
 
@@ -31,7 +31,7 @@ defmodule Watch.Registry do
   # Client
 
   def start_link() do
-    Logger.info "Watching NPM Registry"
+    Logger.info "Polling NPM Registry"
     GenServer.start_link(__MODULE__, nil)
   end
 

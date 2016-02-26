@@ -1,4 +1,4 @@
-defmodule Watch.Log do
+defmodule Registry.Log do
   use GenServer
   require Logger
 

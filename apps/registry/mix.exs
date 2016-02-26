@@ -1,8 +1,8 @@
-defmodule Watch.Mixfile do
+defmodule Registry.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :watch,
+    [app: :registry,
      version: "0.0.1",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
@@ -19,7 +19,7 @@ defmodule Watch.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger, :httpoison, :timex, :amqp],
-     mod: {Watch, []}]
+     mod: {Registry, []}]
   end
 
   # Dependencies can be Hex packages:
