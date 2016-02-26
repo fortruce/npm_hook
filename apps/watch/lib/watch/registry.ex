@@ -13,6 +13,7 @@ defmodule Watch.Registry do
 
   defp publish_package(%{"id" => name, "key" => key}, chan) do
     Logger.info "Package: #{name}"
+    AMQP.Basic.publish(chan, "", @amqp_queue, name)
   end
 
   defp poll(key) do
@@ -43,21 +44,21 @@ defmodule Watch.Registry do
     AMQP.Queue.declare(channel, @amqp_queue)
 
     {:ok, key} = Date.now |> DateFormat.format("{ISOz}")
-    {:ok, {key, channel}}
+    {:ok, {key, channel, connection}}
   end
 
   # Callbacks
 
-  def handle_info(:test, {key, chan}) do
+  def handle_info(:test, {key, chan, conn}) do
     publish_package(%{
       "id" => "test_please_ignore",
       "key" => DateFormat.format(Date.now, "{ISOz}")
     }, chan)
     send_after(:test)
-    {:noreply, {key, chan}}
+    {:noreply, {key, chan, conn}}
   end
 
-  def handle_info(:poll, {key, chan}) do
+  def handle_info(:poll, {key, chan, conn}) do
     packages = poll(key)
     Enum.map(packages, &(publish_package(&1, chan)))
     send_after(:poll)
@@ -65,10 +66,14 @@ defmodule Watch.Registry do
                  [] -> key
                  [%{"key" => key}|_tail] -> key
     end
-    {:noreply, {next_key, chan}}
+    {:noreply, {next_key, chan, conn}}
   end
 
   def handle_info(msg, state) do
     super(msg, state)
+  end
+
+  def terminate(_reason, {_, _, conn}) do
+    AMQP.Connection.close(conn)
   end
 end
