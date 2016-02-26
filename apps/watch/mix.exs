@@ -18,7 +18,7 @@ defmodule Watch.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison, :timex],
+    [applications: [:logger, :httpoison, :timex, :amqp],
      mod: {Watch, []}]
   end
 
@@ -39,7 +39,8 @@ defmodule Watch.Mixfile do
     [
       {:httpoison, "~> 0.8.0"},
       {:poison, "~> 2.0"},
-      {:timex, "~> 1.0"}
+      {:timex, "~> 1.0"},
+      {:amqp, "~> 0.1.4"}
     ]
   end
 end
