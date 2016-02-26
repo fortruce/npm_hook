@@ -1,4 +1,4 @@
-defmodule Npm.Mixfile do
+defmodule NpmHook.Mixfile do
   use Mix.Project
 
   def project do
