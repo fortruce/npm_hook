@@ -5,6 +5,7 @@ defmodule Watch.Registry do
   alias Timex.{Date,DateFormat}
 
   @npm_url "https://skimdb.npmjs.com/registry/_design/app/_view/updated"
+  @amqp_queue "npm"
 
   defp update_url(key) do
     @npm_url <> "?" <> URI.encode_query(%{start_key: "\"#{key}\"", limit: 5})
@@ -39,7 +40,7 @@ defmodule Watch.Registry do
 
     {:ok, connection} = AMQP.Connection.open
     {:ok, channel} = AMQP.Channel.open(connection)
-    AMQP.Queue.declare(channel, "npm")
+    AMQP.Queue.declare(channel, @amqp_queue)
 
     {:ok, key} = Date.now |> DateFormat.format("{ISOz}")
     {:ok, {key, channel}}
