@@ -13,7 +13,7 @@ defmodule Watch.Registry do
     key
   end
 
-  defp query(key) do
+  defp poll(key) do
     %HTTPoison.Response{body: body} = HTTPoison.get! update_url(key)
     body
     |> Poison.decode!
@@ -23,7 +23,7 @@ defmodule Watch.Registry do
   end
 
   defp send_after do
-    Process.send_after(self(), :query, 2 * 1000)
+    Process.send_after(self(), :poll, 2 * 1000)
   end
 
   # Client
@@ -40,8 +40,8 @@ defmodule Watch.Registry do
 
   # Callbacks
 
-  def handle_info(:query, key) do
-    key = case query(key) do
+  def handle_info(:poll, key) do
+    key = case poll(key) do
       [] ->
         key
       keys ->
